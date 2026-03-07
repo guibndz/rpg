@@ -20,13 +20,23 @@ function menu (){
             switch (readline("Digite o número da sua escolha: ")) {
                 case '1':
                     $players[$i] = Character::createCharacter("Player $i");
-                    echo "Player $i escolheu: {$players[$i]->class}\n";
+                    echo "\n✓ Player $i está pronto com {$players[$i]->class}!\n";
+                    readline("Pressione ENTER para continuar...");
                     $ready = true;
                     break;
                 case '2':
-                    echo "Classes disponíveis:\n";
-                    echo "- Warrior: Alta vida e defesa, dano moderado.\n";
-                    echo "- Mage: Alta mana e dano, baixa vida e defesa.\n";
+                    echo "\n====== Classes disponíveis ======\n\n";
+                    echo "WARRIOR (Guerreiro)\n";
+                    echo "  - HP: 175 | MP: 100\n";
+                    echo "  - Dano: 20 | Defesa: 15\n";
+                    echo "  - Especial: Golpe Poderoso (36 dano, 30 MP)\n";
+                    echo "  - Estilo: Tanque equilibrado com boa defesa\n\n";
+                    
+                    echo "MAGE (Mago)\n";
+                    echo "  - HP: 100 | MP: 150\n";
+                    echo "  - Dano: 35 | Defesa: 5\n";
+                    echo "  - Especial: Bola de Fogo (70 dano, 40 MP)\n";
+                    echo "  - Estilo: Alto dano mas frágil\n\n";
                     break;
                 case '0':
                     echo "Saindo...\n";
