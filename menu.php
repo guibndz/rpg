@@ -19,12 +19,14 @@ function menu (){
 
             switch (readline("Digite o número da sua escolha: ")) {
                 case '1':
+                    system('clear');
                     $players[$i] = Character::createCharacter("Player $i");
                     echo "\n✓ Player $i está pronto com {$players[$i]->class}!\n";
                     readline("Pressione ENTER para continuar...");
                     $ready = true;
                     break;
                 case '2':
+                    system('clear');
                     echo "\n====== Classes disponíveis ======\n\n";
                     echo "WARRIOR (Guerreiro)\n";
                     echo "  - HP: 175 | MP: 100\n";
@@ -39,9 +41,11 @@ function menu (){
                     echo "  - Estilo: Alto dano mas frágil\n\n";
                     break;
                 case '0':
+                    system('clear');
                     echo "Saindo...\n";
                     exit;
                 default:
+                    system('clear');
                     echo "Escolha inválida. Tente novamente.\n";
             }
         }

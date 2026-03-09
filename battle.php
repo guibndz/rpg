@@ -23,8 +23,8 @@ function getPlayerAction($playerNum, $player) {
 }
 
 function battle($players) {
+    system('clear');
     $turn = 1;
-
     echo "\n====== | Batalha Iniciada | ======\n";
     echo "Player 1 ({$players[1]->class}) vs Player 2 ({$players[2]->class})\n";
     echo "HP: {$players[1]->life} vs {$players[2]->life}\n";
@@ -36,15 +36,17 @@ function battle($players) {
         displayPlayerStatus($players[2], 2);
         echo "\n";
 
-        // === Player 1 ===
+        // ====== Player 1 ======
         $action1 = getPlayerAction(1, $players[1]);
         switch ($action1) {
             case '1':
+                system('clear');
                 $damageDealt = $players[1]->attack();
                 $damageTaken = $players[2]->takeDamage($damageDealt);
                 echo "Player 1 atacou! Dano causado: $damageTaken\n\n";
                 break;
             case '2':
+                system('clear');
                 $players[1]->defend();
                 echo "Player 1 está defendendo! Vai reduzir o próximo dano recebido.\n\n";
                 break;
@@ -53,6 +55,7 @@ function battle($players) {
                 if ($specialDamage === false) {
                     echo "Mana insuficiente! Player 1 perdeu o turno.\n\n";
                 } else {
+                    system('clear');
                     $damageTaken = $players[2]->takeDamage($specialDamage);
                     echo "Player 1 usou ataque especial! Dano causado: $damageTaken (MP restante: {$players[1]->mana})\n\n";
                 }
@@ -61,26 +64,30 @@ function battle($players) {
                 echo "Ação inválida! Player 1 perdeu o turno.\n\n";
         }
 
-        // Verifica se Player 2 já morreu antes de dar o turno dele
+
         if ($players[2]->life <= 0) break;
 
-        // === Player 2 ===
+        // ====== Player 2 ======
         $action2 = getPlayerAction(2, $players[2]);
         switch ($action2) {
             case '1':
+                system('clear');
                 $damageDealt = $players[2]->attack();
                 $damageTaken = $players[1]->takeDamage($damageDealt);
                 echo "Player 2 atacou! Dano causado: $damageTaken\n\n";
                 break;
             case '2':
+                system('clear');
                 $players[2]->defend();
                 echo "Player 2 está defendendo! Vai reduzir o próximo dano recebido.\n\n";
                 break;
             case '3':
                 $specialDamage = $players[2]->useSpecial();
                 if ($specialDamage === false) {
+                    system('clear');
                     echo "Mana insuficiente! Player 2 perdeu o turno.\n\n";
                 } else {
+                    system('clear');
                     $damageTaken = $players[1]->takeDamage($specialDamage);
                     echo "Player 2 usou ataque especial! Dano causado: $damageTaken (MP restante: {$players[2]->mana})\n\n";
                 }

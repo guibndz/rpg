@@ -62,9 +62,11 @@ abstract class Character {
 
         switch ($choice) {
             case '1':
+                system('clear');
                 echo "Você escolheu: Warrior!\n";
                 return new Warrior("Warrior");
             case '2':
+                system('clear');
                 echo "Você escolheu: Mage!\n";
                 return new Mage("Mage");
             default:
@@ -84,7 +86,6 @@ class Warrior extends Character {
     }
 
     public function specialAttack() {
-        // Golpe Poderoso: 1.8x do dano base
         return round($this->damage * 1.8);
     }
 }
@@ -99,7 +100,6 @@ class Mage extends Character {
     }
 
     public function specialAttack() {
-        // Bola de Fogo: 2x do dano base
         return round($this->damage * 2);
     }
 }

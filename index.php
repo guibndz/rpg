@@ -15,9 +15,11 @@ switch ($option) {
         startGame();
         break;
     case '0':
+        system('clear');
         echo "Saindo...\n";
         exit;
     default:
+        system('clear');
         echo "Opção inválida. Saindo...\n";
         exit;
 }

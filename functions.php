@@ -9,7 +9,6 @@ function startGame() {
     battle($players);
 }
 
-// Só executa se o arquivo for chamado diretamente
 if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
     startGame();
 }
