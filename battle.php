@@ -4,7 +4,17 @@ function displayPlayerStatus($player, $playerNum) {
     $class = $player->class;
     $hp = max(0, $player->life);
     $mana = $player->mana;
-    echo "Player $playerNum ($class): $hp HP | $mana MP\n";
+    $effectsText = "";
+
+    if (!empty($player->effects)) {
+        $effects = [];
+        foreach ($player->effects as $effect) {
+            $effects[] = "{$effect['name']} ({$effect['turns']}t)";
+        }
+        $effectsText = " | Efeitos: " . implode(", ", $effects);
+    }
+
+    echo "Player $playerNum ($class): $hp HP | $mana MP$effectsText\n";
 }
 
 function getPlayerAction($playerNum, $player) {
@@ -37,6 +47,15 @@ function battle($players) {
         echo "\n";
 
         // ====== Player 1 ======
+        $startTurnEffectsP1 = $players[1]->applyTurnEffects();
+        foreach ($startTurnEffectsP1 as $message) {
+            echo "$message\n";
+        }
+
+        if ($players[1]->life <= 0) {
+            break;
+        }
+
         $action1 = getPlayerAction(1, $players[1]);
         switch ($action1) {
             case '1':
@@ -51,13 +70,20 @@ function battle($players) {
                 echo "Player 1 está defendendo! Vai reduzir o próximo dano recebido.\n\n";
                 break;
             case '3':
-                $specialDamage = $players[1]->useSpecial();
-                if ($specialDamage === false) {
+                $specialResult = $players[1]->useSpecial();
+                if ($specialResult === false) {
                     echo "Mana insuficiente! Player 1 perdeu o turno.\n\n";
                 } else {
                     system('clear');
+                    $specialDamage = is_array($specialResult) ? $specialResult['damage'] : $specialResult;
                     $damageTaken = $players[2]->takeDamage($specialDamage);
                     echo "Player 1 usou ataque especial! Dano causado: $damageTaken (MP restante: {$players[1]->mana})\n\n";
+
+                    if (is_array($specialResult) && isset($specialResult['effect'])) {
+                        $effect = $specialResult['effect'];
+                        $players[2]->addEffect($effect['name'], $effect['damage'], $effect['duration']);
+                        echo "Player 2 recebeu {$effect['name']} por {$effect['duration']} turnos!\n\n";
+                    }
                 }
                 break;
             default:
@@ -68,6 +94,15 @@ function battle($players) {
         if ($players[2]->life <= 0) break;
 
         // ====== Player 2 ======
+        $startTurnEffectsP2 = $players[2]->applyTurnEffects();
+        foreach ($startTurnEffectsP2 as $message) {
+            echo "$message\n";
+        }
+
+        if ($players[2]->life <= 0) {
+            break;
+        }
+
         $action2 = getPlayerAction(2, $players[2]);
         switch ($action2) {
             case '1':
@@ -82,14 +117,21 @@ function battle($players) {
                 echo "Player 2 está defendendo! Vai reduzir o próximo dano recebido.\n\n";
                 break;
             case '3':
-                $specialDamage = $players[2]->useSpecial();
-                if ($specialDamage === false) {
+                $specialResult = $players[2]->useSpecial();
+                if ($specialResult === false) {
                     system('clear');
                     echo "Mana insuficiente! Player 2 perdeu o turno.\n\n";
                 } else {
                     system('clear');
+                    $specialDamage = is_array($specialResult) ? $specialResult['damage'] : $specialResult;
                     $damageTaken = $players[1]->takeDamage($specialDamage);
                     echo "Player 2 usou ataque especial! Dano causado: $damageTaken (MP restante: {$players[2]->mana})\n\n";
+
+                    if (is_array($specialResult) && isset($specialResult['effect'])) {
+                        $effect = $specialResult['effect'];
+                        $players[1]->addEffect($effect['name'], $effect['damage'], $effect['duration']);
+                        echo "Player 1 recebeu {$effect['name']} por {$effect['duration']} turnos!\n\n";
+                    }
                 }
                 break;
             default:

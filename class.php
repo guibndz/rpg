@@ -7,6 +7,7 @@ abstract class Character {
     public $damage;
     public $defense;
     public $mana;
+    public $effects = [];
 
     public function __construct($class) {
         $this->class = $class;
@@ -34,6 +35,43 @@ abstract class Character {
         return $this->specialAttack();
     }
 
+    public function addEffect($name, $damagePerTurn, $duration) {
+        foreach ($this->effects as &$effect) {
+            if ($effect['name'] === $name) {
+                $effect['damage'] = $damagePerTurn;
+                $effect['turns'] = $duration;
+                return;
+            }
+        }
+
+        $this->effects[] = [
+            'name' => $name,
+            'damage' => $damagePerTurn,
+            'turns' => $duration
+        ];
+    }
+
+    public function applyTurnEffects() {
+        $messages = [];
+
+        foreach ($this->effects as $index => &$effect) {
+            $damage = max(1, $effect['damage']);
+            $this->life -= $damage;
+            $effect['turns'] -= 1;
+
+            $messages[] = "{$this->class} sofreu {$damage} de dano por {$effect['name']}!";
+
+            if ($effect['turns'] <= 0) {
+                $messages[] = "{$effect['name']} terminou em {$this->class}.";
+                unset($this->effects[$index]);
+            }
+        }
+
+        $this->effects = array_values($this->effects);
+
+        return $messages;
+    }
+
     public $isDefending = false;
 
     public function defend() {
@@ -57,7 +95,7 @@ abstract class Character {
         echo "\n$name, escolha sua classe:\n";
         echo "1. Warrior (Guerreiro)\n";
         echo "2. Mage (Mago)\n";
-
+        echo "3. Pally (Paladino)\n";
         $choice = trim(readline("Digite o número da sua escolha: "));
 
         switch ($choice) {
@@ -69,6 +107,10 @@ abstract class Character {
                 system('clear');
                 echo "Você escolheu: Mage!\n";
                 return new Mage("Mage");
+            case '3':
+                system('clear');
+                echo "Você escolheu: Pally!\n";
+                return new Pally("Pally");
             default:
                 echo "Escolha inválida. Selecionando Warrior como padrão.\n";
                 return new Warrior("Warrior");
@@ -86,7 +128,14 @@ class Warrior extends Character {
     }
 
     public function specialAttack() {
-        return round($this->damage * 1.8);
+        return [
+            'damage' => round($this->damage * 1.8),
+            'effect' => [
+                'name' => 'Sangramento',
+                'damage' => 8,
+                'duration' => 3
+            ]
+        ];
     }
 }
 
@@ -100,6 +149,34 @@ class Mage extends Character {
     }
 
     public function specialAttack() {
-        return round($this->damage * 2);
+        return [
+            'damage' => round($this->damage * 2),
+            'effect' => [
+                'name' => 'Queimadura',
+                'damage' => 10,
+                'duration' => 3
+            ]
+        ];
+    }
+}
+
+class Pally extends Character {
+    protected function setAttributes() {
+        $this->life        = 150;
+        $this->damage      = 25;
+        $this->defense     = 10;
+        $this->mana        = 120;
+        $this->specialCost = 35;
+    }
+
+    public function specialAttack() {
+        return [
+            'damage' => round($this->damage * 1.5),
+            'effect' => [
+                'name' => 'Ferida Sagrada',
+                'damage' => 6,
+                'duration' => 2
+            ]
+        ];
     }
 }
