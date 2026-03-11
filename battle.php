@@ -93,6 +93,11 @@ function battle($players) {
 
         if ($players[2]->life <= 0) break;
 
+        echo "--- Turno $turn ---\n";
+        displayPlayerStatus($players[1], 1);
+        displayPlayerStatus($players[2], 2);
+        echo "\n";
+
         // ====== Player 2 ======
         $startTurnEffectsP2 = $players[2]->applyTurnEffects();
         foreach ($startTurnEffectsP2 as $message) {
