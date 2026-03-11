@@ -120,19 +120,19 @@ abstract class Character {
 
 class Warrior extends Character {
     protected function setAttributes() {
-        $this->life        = 175;
-        $this->damage      = 20;
-        $this->defense     = 15;
-        $this->mana        = 100;
-        $this->specialCost = 30;
+        $this->life        = 300;
+        $this->damage      = 24;
+        $this->defense     = 24;
+        $this->mana        = 150;
+        $this->specialCost = 45;
     }
 
     public function specialAttack() {
         return [
-            'damage' => round($this->damage * 1.8),
+            'damage' => round($this->damage * 1.6),
             'effect' => [
                 'name' => 'Sangramento',
-                'damage' => 8,
+                'damage' => 6,
                 'duration' => 3
             ]
         ];
@@ -141,19 +141,19 @@ class Warrior extends Character {
 
 class Mage extends Character {
     protected function setAttributes() {
-        $this->life        = 100;
-        $this->damage      = 35;
-        $this->defense     = 5;
-        $this->mana        = 150;
-        $this->specialCost = 40;
+        $this->life        = 240;
+        $this->damage      = 28;
+        $this->defense     = 14;
+        $this->mana        = 220;
+        $this->specialCost = 55;
     }
 
     public function specialAttack() {
         return [
-            'damage' => round($this->damage * 2),
+            'damage' => round($this->damage * 1.7),
             'effect' => [
                 'name' => 'Queimadura',
-                'damage' => 10,
+                'damage' => 7,
                 'duration' => 3
             ]
         ];
@@ -162,20 +162,20 @@ class Mage extends Character {
 
 class Pally extends Character {
     protected function setAttributes() {
-        $this->life        = 150;
+        $this->life        = 280;
         $this->damage      = 25;
-        $this->defense     = 10;
-        $this->mana        = 120;
-        $this->specialCost = 35;
+        $this->defense     = 20;
+        $this->mana        = 180;
+        $this->specialCost = 50;
     }
 
     public function specialAttack() {
         return [
-            'damage' => round($this->damage * 1.5),
+            'damage' => round($this->damage * 1.55),
             'effect' => [
                 'name' => 'Ferida Sagrada',
-                'damage' => 6,
-                'duration' => 2
+                'damage' => 5,
+                'duration' => 3
             ]
         ];
     }
